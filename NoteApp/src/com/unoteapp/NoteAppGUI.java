@@ -1,13 +1,22 @@
 package com.unoteapp;
 
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
 import com.unanoteapp.model.Note;
 import com.unanoteapp.repository.NoteRepository;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.event.*;
-import java.util.List;
 
 public class NoteAppGUI {
     private JFrame frame;
@@ -59,8 +68,8 @@ public class NoteAppGUI {
                 String title = titleField.getText();
                 String content = contentArea.getText();
                 if (!title.isEmpty() && !content.isEmpty()) {
-                    Note note = new Note(0, title, content);
-                    repository.addNote(note);
+                    setNote(new Note(0, title, content));
+                    repository.addNote(title, content);  
                     updateTable();
                     titleField.setText("");
                     contentArea.setText("");
@@ -69,6 +78,9 @@ public class NoteAppGUI {
                     JOptionPane.showMessageDialog(frame, "Preencha título e conteúdo.");
                 }
             }
+
+			public void setNote(Note note) {
+			}
         });
 
         deleteButton.addActionListener(new ActionListener() {
