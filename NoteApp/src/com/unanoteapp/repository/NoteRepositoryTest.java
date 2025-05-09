@@ -10,11 +10,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class NoteRepositoryTest {
 
-    private NoteRpository repository;
+    private NoteRepository repository;
 
     @BeforeEach
     void setUp() {
-        repository = new NoteRpository();
+        repository = new NoteRepository();
     }
 
     @Test
@@ -34,7 +34,7 @@ class NoteRepositoryTest {
     }
 
     @Test
-    void testUpdateNote() {
+    void testUpdateNote () {
         repository.addNote("Original", "Texto");
         boolean updated = repository.updateNote(1, "Atualizado", "Novo conteúdo");
         Note updatedNote = repository.getNoteById(1);

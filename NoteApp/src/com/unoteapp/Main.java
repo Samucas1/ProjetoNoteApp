@@ -1,11 +1,11 @@
 package com.unoteapp;
 
-import com.unanoteapp.repository.NoteRpository;
+import com.unanoteapp.repository.NoteRepository;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        NoteRpository repo = new NoteRpository();
+        NoteRepository repo = new NoteRepository();
         Scanner scanner = new Scanner(System.in);
         int opcao;
 

@@ -1,6 +1,7 @@
 package com.unanoteapp.model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Note {
     private int id;
@@ -21,7 +22,9 @@ public class Note {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.createdAt = LocalDateTime.parse(createdAt);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        this.createdAt = LocalDateTime.parse(createdAt, formatter);
+
     }
 
     // Getters e Setters
