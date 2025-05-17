@@ -4,6 +4,9 @@ import com.unanoteapp.model.Note;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,6 +18,17 @@ class NoteRepositoryTest {
     @BeforeEach
     void setUp() {
         repository = new NoteRepository();
+        clearDatabase();
+    }
+
+    void clearDatabase() {
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:notes.db");
+             Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate("DELETE FROM notes");
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Erro ao limpar o banco de dados: " + e.getMessage());
+        }
     }
 
     @Test
@@ -27,17 +41,17 @@ class NoteRepositoryTest {
 
     @Test
     void testGetNoteById() {
-        repository.addNote("Nota 2", "Texto da nota 2");
-        Note note = repository.getNoteById(1);
+        int noteId = repository.addNote("Nota 2", "Texto da nota 2");
+        Note note = repository.getNoteById(noteId);
         assertNotNull(note);
         assertEquals("Nota 2", note.getTitle());
     }
 
     @Test
-    void testUpdateNote () {
-        repository.addNote("Original", "Texto");
-        boolean updated = repository.updateNote(1, "Atualizado", "Novo conteúdo");
-        Note updatedNote = repository.getNoteById(1);
+    void testUpdateNote() {
+        int noteId = repository.addNote("Original", "Texto");
+        boolean updated = repository.updateNote(noteId, "Atualizado", "Novo conteúdo");
+        Note updatedNote = repository.getNoteById(noteId);
 
         assertTrue(updated);
         assertEquals("Atualizado", updatedNote.getTitle());
@@ -45,9 +59,9 @@ class NoteRepositoryTest {
 
     @Test
     void testDeleteNote() {
-        repository.addNote("Nota Excluída", "Conteúdo");
-        boolean deleted = repository.deleteNote(1);
-        Note note = repository.getNoteById(1);
+        int noteId = repository.addNote("Nota Excluída", "Conteúdo");
+        boolean deleted = repository.deleteNote(noteId);
+        Note note = repository.getNoteById(noteId);
 
         assertTrue(deleted);
         assertNull(note);

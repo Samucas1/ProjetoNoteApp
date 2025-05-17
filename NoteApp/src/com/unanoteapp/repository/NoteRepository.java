@@ -31,16 +31,22 @@ public class NoteRepository {
         }
     }
 
-    public void addNote(String title, String content) {
+    public int addNote(String title, String content) {
         String sql = "INSERT INTO notes(title, content) VALUES(?, ?)";
         try (Connection conn = DatabaseConnection.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, title);
             pstmt.setString(2, content);
             pstmt.executeUpdate();
+
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return -1;
     }
 
     public List<Note> getAllNotes() {
