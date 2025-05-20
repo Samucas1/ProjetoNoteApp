@@ -12,6 +12,7 @@ module NoteApp {
 	opens com.unanoteapp.repository to org.junit.platform.commons;
     exports com.unanoteapp.model;
     exports com.unanoteapp.repository;
+    exports api;
 
 
 }

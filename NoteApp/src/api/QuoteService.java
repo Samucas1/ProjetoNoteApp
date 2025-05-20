@@ -3,37 +3,37 @@ package api;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class QuoteService {
-
-    public static String getRandomQuote() {
-        String apiUrl = "https://zenquotes.io/api/random";
+    public String getRandomQuote() {
         try {
-        	URI uri = URI.create(apiUrl);
-        	URL url = uri.toURL();
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
+            @SuppressWarnings("deprecation")
+			URL url = new URL("https://api.quotable.io/random"); //Código original (desativado por falha de rede na máquina):
+          //Motivo: bloqueio de rede acadêmica. Versão offline ativada provisoriamente para testes.
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String inputLine;
-            StringBuilder content = new StringBuilder();
+            StringBuilder response = new StringBuilder();
+
             while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
+                response.append(inputLine);
             }
             in.close();
 
-            JSONArray jsonArr = new JSONArray(content.toString());
-            JSONObject obj = jsonArr.getJSONObject(0);
-            String quote = obj.getString("q");
-            String author = obj.getString("a");
+            // Pega só a parte do conteúdo da citação
+            String json = response.toString();
+            int start = json.indexOf("\"content\":\"") + 11;
+            int end = json.indexOf("\"", start);
+            return json.substring(start, end);
 
-            return "\"" + quote + "\" - " + author;
         } catch (Exception e) {
-            return "Erro ao obter citação.";
+            e.printStackTrace(); // isso mostra o erro no console
+            return "Seja sua melhor versão."; // fallback
         }
     }
 }
+
+
